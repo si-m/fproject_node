@@ -1,5 +1,7 @@
-import config       from 'config'
-import Twitter from 'twitter'
+import config             from 'config'
+import Twitter            from 'twitter'
+import prediction_client  from  '../grpc_stub/client'
+
 const client = new Twitter(config.get('TWITTER_CONFIG'))
 
 exports.predict = (req, res, next) => {
@@ -12,15 +14,23 @@ exports.predict = (req, res, next) => {
 		let count = parseInt(n)
 		if(isNaN(count) ||  count > 30)
 			count = 10
+		let hashtag = '#' + text
+		client.get('search/tweets', {q: hashtag, lang: 'es', count:count, exclude:'retweets'}, (error, tweets, response) => {
+			if(error)
+				 _jsonError(res, error, 500)
 
-		client.get('search/tweets', {q: text, lang: 'es', count:count}, (error, tweets, response) => {
-	  	res.json(tweets.statuses.map((raw_tweet) => raw_tweet.text))
+	  	let tweets_list = tweets.statuses.map((raw_tweet) => raw_tweet.text)
+	  	prediction_client.predict(tweets_list)
+			 .then(predictions => res.json(Object.assign({tweets_list}, predictions)))
+			 .catch(err => _jsonError(res, err, 500))
 	  })
+
 	}else{
 		//send text to prediction api
-		res.json({"text": text})	
-	}
-
+		prediction_client.predict(text)
+			.then(predictions => res.json(predictions))
+			.catch(err => _jsonError(res, err, 500))
+		}
 
 
 }
