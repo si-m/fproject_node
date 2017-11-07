@@ -5,16 +5,16 @@ import prediction_client  from  '../grpc_stub/client'
 const client = new Twitter(config.get('TWITTER_CONFIG'))
 
 exports.predict = (req, res, next) => {
-	const {text, twitter_api, n} = req.query
- 	if(!text)
-	 	_jsonError(res, { message: "Bad request, no text query." }, 400)
+	const {input, twitter_api, n} = req.query
+ 	if(!input)
+	 	_jsonError(res, { message: "Bad request, no input query." }, 400)
 
 	if(twitter_api === "yes"){
 		//first retive tweets and then send it to prediction api
 		let count = parseInt(n)
 		if(isNaN(count) ||  count > 30)
 			count = 10
-		let hashtag = '#' + text
+		let hashtag = '#' + input
 		client.get('search/tweets', {q: hashtag, lang: 'es', count:count, exclude:'retweets'}, (error, tweets, response) => {
 			if(error)
 				 _jsonError(res, error, 500)
@@ -27,7 +27,7 @@ exports.predict = (req, res, next) => {
 
 	}else{
 		//send text to prediction api
-		prediction_client.predict(text)
+		prediction_client.predict(input)
 			.then(predictions => res.json(predictions))
 			.catch(err => _jsonError(res, err, 500))
 		}
