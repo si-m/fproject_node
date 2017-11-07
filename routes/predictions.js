@@ -3,10 +3,8 @@ import predictionsController  from '../controllers/predictions'
 
 const router = express.Router()
 module.exports = () => {
-  
-  router.get('/predict/tweets', predictionsController.tweets)
 
-  router.get('/predict/text', predictionsController.text)
+  router.get('/predict/', predictionsController.predict)
 
   return router
 }
