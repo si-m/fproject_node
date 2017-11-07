@@ -1,0 +1,37 @@
+{
+  "name": "fproject-node",
+  "version": "1.0.0",
+  "description": "web server fproject",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js --exec babel-node",
+    "test": "NODE_ENV=test mocha --compilers js:babel-register",
+    "set_admin": "babel-node ./seeds/admin.js",
+    "clean": "rm -rf build && mkdir build",
+    "build-server": "babel . -d build --ignore node_modules",
+    "build": "npm run clean && npm run build-server",
+    "serve": "node ./build/server.js"
+  },
+  "author": "SiM",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "config": "^1.27.0",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "debug": "^3.1.0",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-http": "^3.0.0",
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.1"
+  }
+}
