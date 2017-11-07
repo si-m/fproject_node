@@ -1,9 +1,0 @@
-{
-	"CORS": "http://localhost:8080",
-	"CORS_CREDEN": "true",
-	"NODE_ENV": "development",
-	"TWITTER_CONFIG" : { "consumer_key": "apqWpfezZf3nyDTA9uS84ntTf",
-  									"consumer_secret": "nSEL6etyMbDJ5vm55XMWdXbN1oHEZlx7NmsulWwZrQHjzzcob8",
-      							"access_token_key": "330883507-mE7Hep5fzrOFFBoELxi9wlhreHQAPTpsrd5Uaod7",
-     								"access_token_secret": "fwhwKbgmw31216WE8FcfF22PnGPmMVwf3iuJpeWL5C40G"}
-}
