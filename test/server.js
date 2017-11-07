@@ -22,3 +22,17 @@ describe('Fproject node Server', () => {
 	      })
   })
 })
+
+describe('Fproject node Server', () => {
+  it('it should return 200', (done) => {
+	  chai.request(server)
+	      .get('/')
+	      .end((err, res) => {
+	          res.should.have.status(200);
+						res.body.should.be.a('object');
+						res.body.should.have.property('message');
+	          res.body.message.should.be.eql("Fproject it's up & running")
+	        done();
+	      })
+  })
+})
