@@ -1,12 +1,13 @@
 const PROTO_PATH = __dirname + '/api.proto'
 
-import grpc from 'grpc'
+import grpc     from 'grpc'
+import config   from 'config'
 
 const proto_stub = grpc.load(PROTO_PATH)
 
 exports.predict = (data) => {
   return new Promise((resolve, reject) => {
-    const client = new proto_stub.Api('172.17.0.2:50051', grpc.credentials.createInsecure())
+    const client = new proto_stub.Api(config.PREDICTION_API, grpc.credentials.createInsecure())
 
     client.predict({tweets: data}, (err, response) => {
       if(err)
