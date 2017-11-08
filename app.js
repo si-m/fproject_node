@@ -27,6 +27,7 @@ app.use('/', routes);
 app.use(function(req, res, next) {
   let err = new Error('Not Found');
   err.status = 404;
+  console.log("asdasasd")
   next(err);
 });
 
@@ -35,7 +36,7 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = config.util.getEnv('NODE_ENV') === 'development' || config.util.getEnv('NODE_ENV') === 'test' ? err : {};
-  console.log("Error message: ", err.message)
+  console.log("Api error message: ", err.message)
   // render the error page
   res.status(err.status || 500)
   res.json({ message: "api error", status: err.status})
