@@ -27,7 +27,6 @@ app.use('/', routes);
 app.use(function(req, res, next) {
   let err = new Error('Not Found');
   err.status = 404;
-  console.log("asdasasd")
   next(err);
 });
 
