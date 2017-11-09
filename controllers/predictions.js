@@ -9,21 +9,25 @@ exports.predict = (req, res, next) => {
  	if(!input){
 	 	return _jsonError(res, { message: "Bad request, no input query." }, 400)
 	}
-	if(twitter_api === "yes"){
+	if(twitter_api === "true"){
 		//first retive tweets and then send it to prediction api
 		let count = parseInt(n)
-		if(isNaN(count) ||  count > 30)
+		if(isNaN(count) ||  count > 50)
 			count = 10
-		let hashtag = '#' + input
-		client.get('search/tweets', {q: hashtag, lang: 'es', count:count, exclude:'retweets'})
+		let hashtag = input
+		if(!input.startsWith('#'))
+		  hashtag = '#' + input
+		client.get('search/tweets', {q: hashtag, lang: 'es', count: count, exclude:'retweets', result_type:'mixed'})
 			.then((tweets, response) => {
 					return tweets.statuses.map((raw_tweet) => raw_tweet.text)
 				})
-			.then((tweets_list)=>{
-				return prediction_client.predict(tweets_list)
+			.then(async (tweets_list)=>{
+				let predictions = []
+				predictions = await prediction_client.predict(tweets_list)
+				return Object.assign({tweets_list}, predictions)
 			  })
-			.then((predictions)=>{
-				res.json(Object.assign({tweets_list}, predictions))
+			.then((result)=>{
+				res.json(result)
 			 })
 			.catch((err)=>{
 				_jsonError(res, error, 500)
@@ -32,17 +36,9 @@ exports.predict = (req, res, next) => {
 	}else{
 		//send text to prediction api
 		prediction_client.predict(input)
-			.then(predictions => res.json(predictions))
+			.then(predictions => res.json(Object.assign({tweets_list: [input]}, predictions)))
 			.catch(err => _jsonError(res, err, 500))
 		}
 }
 
-// let twitter_call = () =>{
-// 	return new Promise(())
-// 		client.get('search/tweets', {q: hashtag, lang: 'es', count:count, exclude:'retweets'}, (error, tweets, response) => {
-// 			if(error)
-// 				 _jsonError(res, error, 500)
-// 			tweets.statuses.map((raw_tweet) => raw_tweet.text)
-// 		})
-// }
 let _jsonError = (res, err, status) => { res.json({ message: err.message, status: status }) }
