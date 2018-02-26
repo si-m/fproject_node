@@ -1,6 +1,19 @@
 # fproject_node
 Web Server for the prediction api
 
+#### Pre-requisites
+* npm
+* https://github.com/si-m/fproject
+* https://github.com/si-m/fproject_serv
+
+#### Install & Usage
+* clone repository
+```sh
+$ cd fproject_node
+$ npm install
+$ npm start
+```
+
 **Predict tweets**
 ----
   Returns json data with the tweets and their predictions.
